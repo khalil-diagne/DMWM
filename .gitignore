@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.dist/
+
+# Environment variables (secrets)
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+api.err.log
+api.out.log
+
+# Caches
+.tmp/
+.tmp
+.vite/
