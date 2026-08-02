@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { getCategory, getCategoryByName, updateCategory, deleteCategory, countEventsByCategory } from "../_lib/db";
-import { requireRole } from "../_lib/auth";
-import { json, readBody, str } from "../_lib/http";
+import { getCategory, getCategoryByName, updateCategory, deleteCategory, countEventsByCategory } from "../_lib/db.js";
+import { requireRole } from "../_lib/auth.js";
+import { json, readBody, str } from "../_lib/http.js";
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   const admin = await requireRole(req, res, ["admin"]);

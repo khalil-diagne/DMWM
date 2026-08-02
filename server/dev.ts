@@ -1,16 +1,16 @@
 import "dotenv/config";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
-import login from "../api/auth/login";
-import logout from "../api/auth/logout";
-import me from "../api/auth/me";
-import eventsIndex from "../api/events/index";
-import eventDetail from "../api/events/[id]";
-import usersIndex from "../api/users/index";
-import userDetail from "../api/users/[id]";
-import categoriesIndex from "../api/categories/index";
-import categoryDetail from "../api/categories/[id]";
-import reset from "../api/reset";
-import { json } from "../api/_lib/http";
+import login from "../api/auth/login.js";
+import logout from "../api/auth/logout.js";
+import me from "../api/auth/me.js";
+import eventsIndex from "../api/events/index.js";
+import eventDetail from "../api/events/[id].js";
+import usersIndex from "../api/users/index.js";
+import userDetail from "../api/users/[id].js";
+import categoriesIndex from "../api/categories/index.js";
+import categoryDetail from "../api/categories/[id].js";
+import reset from "../api/reset.js";
+import { json } from "../api/_lib/http.js";
 
 const routes: { match: (method: string, path: string) => boolean; handler: (req: IncomingMessage, res: ServerResponse) => Promise<void> }[] = [
   { match: (m, p) => m === "POST" && p === "/api/auth/login", handler: login },

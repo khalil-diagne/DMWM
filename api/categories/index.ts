@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { getCategories, getCategoryByName, createCategory } from "../_lib/db";
-import { requireRole } from "../_lib/auth";
-import { json, readBody, str } from "../_lib/http";
+import { getCategories, getCategoryByName, createCategory } from "../_lib/db.js";
+import { requireRole } from "../_lib/auth.js";
+import { json, readBody, str } from "../_lib/http.js";
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   if (req.method === "GET") {

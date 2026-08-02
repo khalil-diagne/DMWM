@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { getAuthUser } from "../_lib/auth";
-import { json } from "../_lib/http";
+import { getAuthUser } from "../_lib/auth.js";
+import { json } from "../_lib/http.js";
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   if (req.method !== "GET") return json(res, 405, { error: "Méthode non autorisée" });

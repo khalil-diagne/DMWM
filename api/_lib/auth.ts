@@ -1,7 +1,7 @@
 import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { getUserById, type UserRow } from "./db";
+import { getUserById, type UserRow } from "./db.js";
 
 export const COOKIE_NAME = "dahira_token";
 const MAX_AGE = 60 * 60 * 24 * 7;
