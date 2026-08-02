@@ -79,6 +79,14 @@ export default function Layout() {
             )}
           </nav>
           <div className="ml-auto flex items-center gap-3">
+            {!user && (
+              <NavLink
+                to="/connexion-admin"
+                className="rounded-full bg-gold px-4 py-2 text-xs font-bold text-green-darker transition hover:opacity-90"
+              >
+                Se connecter
+              </NavLink>
+            )}
             <span className="arabic hidden text-lg text-gold/90 lg:block">بسم الله الرحمن الرحيم</span>
             <button
               onClick={() => setOpen((o) => !o)}
@@ -115,6 +123,14 @@ export default function Layout() {
                 }
               >
                 Admin
+              </NavLink>
+            )}
+            {!user && (
+              <NavLink
+                to="/connexion-admin"
+                className="block rounded-xl bg-gold px-4 py-3 text-center text-sm font-bold text-green-darker"
+              >
+                Se connecter
               </NavLink>
             )}
           </nav>
