@@ -23,8 +23,7 @@ export default function EventDetail() {
       </div>
       <div className="mx-auto max-w-3xl px-5 py-10">
         <Link to="/evenements" className="text-xs font-bold uppercase tracking-widest text-terracotta">← Programme</Link>
-        <span className="ml-3 rounded-full bg-green-dark px-3 py-1 text-[0.65rem] font-bold text-gold">{e.category}</span>
-        <h2 className="mt-3 text-3xl font-extrabold text-green-darker">{e.title}</h2>
+        <span className="ml-3 rounded-full bg-green-dark px-3 py-1 text-[0.65rem] font-bold text-gold">{e.category}</span>        <h2 className="mt-3 text-3xl font-extrabold text-green-darker">{e.title}</h2>
         <p className="mt-2 text-ink/70">{e.desc}</p>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">

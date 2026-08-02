@@ -1,7 +1,7 @@
 export type SeedEvent = {
   id: string;
   title: string;
-  category: "Ziarra" | "Causerie" | "Récital" | "Social" | "Assemblée";
+  category: string;
   date: string;
   time: string;
   place: string;
@@ -12,6 +12,14 @@ export type SeedEvent = {
   host: string;
   phone: string;
 };
+
+export const seedCategories: { id: string; name: string; color: string }[] = [
+  { id: "cat_ziarra", name: "Ziarra", color: "#0F3D2E" },
+  { id: "cat_causerie", name: "Causerie", color: "#2E4053" },
+  { id: "cat_rectial", name: "Récital", color: "#C1502E" },
+  { id: "cat_social", name: "Social", color: "#D4A24C" },
+  { id: "cat_assemblee", name: "Assemblée", color: "#1C2620" },
+];
 
 export const seedEvents: SeedEvent[] = [
   {

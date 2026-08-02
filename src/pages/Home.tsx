@@ -33,21 +33,27 @@ function Countdown({ target }: { target: Date }) {
 
 export default function Home() {
   const { events, loading } = useEvents();
-  const next = events[0];
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const upcoming = events.find((e) => new Date(`${e.date}T${e.time}:00`).getTime() > now);
+  const next = upcoming ?? events[0];
 
   return (
     <>
       <section className="relative overflow-hidden bg-gradient-to-b from-creamdark to-cream px-5 pb-16 pt-14">
         <div className="islamic-pattern pointer-events-none absolute inset-0 opacity-30" />
         <div className="relative mx-auto max-w-4xl text-center">
-          <div className="arabic floaty text-3xl leading-relaxed text-green-dark md:text-4xl">
+          <div className="arabic-calligraphy floaty text-4xl leading-loose text-green-dark md:text-5xl">
             وَتَعَاوَنُوا عَلَى الْبِرِّ وَالتَّقْوَىٰ
           </div>
-          <p className="mt-2 text-xs italic text-ink/50">
+          <p className="mt-3 text-xs italic text-ink/50">
             « Entraidez-vous dans l'accomplissement des bonnes œuvres et de la piété » — Sourate Al-Mâ'ida, 5:2
           </p>
-          <div className="mt-6 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-terracotta">
-            Bismillahir Rahmanir Rahim
+          <div className="mt-6 arabic-calligraphy text-2xl font-bold tracking-wide text-terracotta">
+            بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
           </div>
           <h2 className="mt-3 text-3xl font-extrabold leading-tight text-green-darker md:text-5xl">
             Où se déroule notre <span className="text-terracotta">prochaine rencontre</span> ?

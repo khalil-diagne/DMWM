@@ -1,9 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { getEvents, createEvent } from "../../server/db";
+import { getEvents, createEvent, getCategories } from "../../server/db";
 import { requireRole } from "../../server/auth";
 import { json, readBody, str } from "../../server/http";
-
-const CATEGORIES = ["Ziarra", "Causerie", "Récital", "Social", "Assemblée"];
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   if (req.method === "GET") {
@@ -34,7 +32,10 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     const lat = Number(body.lat);
     const lng = Number(body.lng);
 
-    if (!title || !date || !place || !city || !CATEGORIES.includes(category)) {
+    const categories = await getCategories();
+    const valid = categories.some((c) => c.name === category);
+
+    if (!title || !date || !place || !city || !valid) {
       return json(res, 400, { error: "Champs obligatoires manquants ou invalides" });
     }
     if (!Number.isFinite(lat) || !Number.isFinite(lng)) {

@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
 import { useEvents } from "../store";
+import { useCategories } from "../categories";
 import EventCard from "../components/EventCard";
-
-const cats = ["Tous", "Ziarra", "Causerie", "Récital", "Social", "Assemblée"];
 
 export default function Events() {
   const { events, loading, error } = useEvents();
+  const { categories } = useCategories();
+  const cats = ["Tous", ...categories.map((c) => c.name)];
   const [cat, setCat] = useState("Tous");
   const [q, setQ] = useState("");
 

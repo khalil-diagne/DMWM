@@ -44,10 +44,10 @@ export default function Contact() {
 
         <div className="space-y-4">
           {[
-            ["📞", "Téléphone", "+221 77 000 00 01"],
+            ["📞", "Téléphone", "+221 70 777 57 20"],
             ["💬", "Groupe WhatsApp", "Annonces des ziarras"],
-            ["✉️", "Email", "contact@dahira-moustarchidina.sn"],
-            ["📍", "Siège", "Cité Keur Gorgui, Dakar, Sénégal"],
+            ["✉️", "Email", "diagneibeu10@gmail.com"],
+            ["📍", "Siège", "Station Canada , Dakar, Sénégal"],
           ].map(([i, t, v]) => (
             <div key={t} className="flex items-start gap-4 rounded-2xl border border-green-dark/10 bg-white p-5">
               <div className="text-2xl">{i}</div>

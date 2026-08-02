@@ -2,26 +2,18 @@ import { Link } from "react-router-dom";
 import { MiniMap } from "./Map";
 import { mapsUrl, shortDate, waUrl, type EventItem } from "../data";
 
-const catColor: Record<string, string> = {
-  Ziarra: "bg-green-dark text-gold",
-  Causerie: "bg-slate2 text-cream",
-  Récital: "bg-terracotta text-white",
-  Social: "bg-gold text-green-darker",
-  Assemblée: "bg-ink text-gold",
-};
-
 export default function EventCard({ e, onDelete }: { e: EventItem; onDelete?: () => void }) {
   const d = shortDate(e.date);
   return (
     <article className="fade-up group overflow-hidden rounded-2xl border border-green-dark/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl hover:shadow-green-dark/10">
       <div className="relative">
-        <MiniMap lat={e.lat} lng={e.lng} height={150} />
+        <MiniMap lat={e.lat} lng={e.lng} category={e.category} height={150} />
         <div className="pointer-events-none absolute left-4 top-4 z-10 rounded-xl bg-white/95 px-3 py-2 text-center shadow-md">
           <div className="text-[0.6rem] font-bold tracking-widest text-terracotta">{d.weekday}</div>
           <div className="text-xl font-extrabold leading-none text-green-darker">{d.day}</div>
           <div className="text-[0.6rem] font-bold tracking-widest text-slate2">{d.month}</div>
         </div>
-        <span className={`absolute right-4 top-4 z-10 rounded-full px-3 py-1 text-[0.65rem] font-bold tracking-wide ${catColor[e.category] ?? "bg-slate2 text-white"}`}>
+        <span className="absolute right-4 top-4 z-10 rounded-full bg-green-dark px-3 py-1 text-[0.65rem] font-bold tracking-wide text-gold">
           {e.category}
         </span>
       </div>

@@ -1,7 +1,8 @@
+import "dotenv/config";
 import { Pool } from "@neondatabase/serverless";
-import { getUserByEmail, createUser, createEvent } from "../server/db";
+import { getUserByEmail, getCategoryByName, getEvent, createUser, createEvent, createCategory } from "../server/db";
 import { hashPassword } from "../server/auth";
-import { seedEvents } from "../server/seed";
+import { seedEvents, seedCategories } from "../server/seed";
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@dahira.sn";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "dahira-admin-2026";
@@ -28,8 +29,17 @@ async function main() {
     console.log(`Compte admin déjà présent : ${ADMIN_EMAIL}`);
   }
 
+  for (const c of seedCategories) {
+    if (!(await getCategoryByName(c.name))) {
+      await createCategory(c);
+      console.log(`Catégorie créée : ${c.name}`);
+    }
+  }
+
   for (const e of seedEvents) {
-    await createEvent({ ...e, created_by: "admin" });
+    if (!(await getEvent(e.id))) {
+      await createEvent({ ...e, created_by: "admin" });
+    }
   }
   console.log(`${seedEvents.length} événements de démonstration insérés.`);
 

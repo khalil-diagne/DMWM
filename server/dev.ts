@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import login from "../api/auth/login";
 import logout from "../api/auth/logout";
@@ -6,6 +7,8 @@ import eventsIndex from "../api/events/index";
 import eventDetail from "../api/events/[id]";
 import usersIndex from "../api/users/index";
 import userDetail from "../api/users/[id]";
+import categoriesIndex from "../api/categories/index";
+import categoryDetail from "../api/categories/[id]";
 import reset from "../api/reset";
 import { json } from "./http";
 
@@ -22,6 +25,10 @@ const routes: { match: (method: string, path: string) => boolean; handler: (req:
   { match: (m, p) => m === "GET" && p === "/api/users", handler: usersIndex },
   { match: (m, p) => m === "POST" && p === "/api/users", handler: usersIndex },
   { match: (m, p) => m === "DELETE" && /^\/api\/users\/.+/.test(p), handler: userDetail },
+  { match: (m, p) => m === "GET" && p === "/api/categories", handler: categoriesIndex },
+  { match: (m, p) => m === "POST" && p === "/api/categories", handler: categoriesIndex },
+  { match: (m, p) => m === "PUT" && /^\/api\/categories\/.+/.test(p), handler: categoryDetail },
+  { match: (m, p) => m === "DELETE" && /^\/api\/categories\/.+/.test(p), handler: categoryDetail },
 ];
 
 const server = createServer(async (req, res) => {

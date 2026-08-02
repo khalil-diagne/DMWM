@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useEvents } from "../store";
 import { useAuth } from "../auth";
+import { useCategories } from "../categories";
 import { api, type ApiUser } from "../api";
 import EventCard from "../components/EventCard";
+import { LocationPicker } from "../components/LocationPicker";
+import { geocode, type GeoResult } from "../geocode";
 import type { EventItem } from "../data";
 
 const empty = {
@@ -12,8 +15,6 @@ const empty = {
   time: "20:00",
   place: "",
   city: "Dakar",
-  lat: "14.7167",
-  lng: "-17.4677",
   desc: "",
   host: "",
   phone: "+221770000000",
@@ -22,21 +23,50 @@ const empty = {
 export default function Admin() {
   const { events, add, remove, reset, loading, error } = useEvents();
   const { user, logout } = useAuth();
-  const [tab, setTab] = useState<"events" | "users">("events");
+  const { categories } = useCategories();
+  const [tab, setTab] = useState<"events" | "users" | "categories">("events");
   const [f, setF] = useState({ ...empty });
+  const [loc, setLoc] = useState<GeoResult | null>(null);
+  const [locMsg, setLocMsg] = useState("");
+  const [locating, setLocating] = useState(false);
   const [msg, setMsg] = useState("");
+
+  const locate = async () => {
+    setLocMsg("");
+    const q = `${f.place}, ${f.city}, Sénégal`.trim();
+    if (q.length < 3) {
+      setLocMsg("Renseignez d'abord le lieu et le quartier.");
+      return;
+    }
+    setLocating(true);
+    const result = await geocode(q);
+    setLocating(false);
+    if (!result) {
+      setLocMsg("Adresse introuvable. Cliquez sur la carte pour placer le repère manuellement.");
+      setLoc(null);
+      return;
+    }
+    setLoc(result);
+    setLocMsg(`Position trouvée : ${result.label.split(",").slice(0, 2).join(", ")}`);
+  };
 
   const submit = async (ev: React.FormEvent) => {
     ev.preventDefault();
     setMsg("");
+    if (!loc) {
+      setMsg("Localisez d'abord le lieu (bouton « Localiser » ou clic sur la carte).");
+      return;
+    }
     try {
       await add({
         ...f,
         category: f.category as EventItem["category"],
-        lat: parseFloat(f.lat),
-        lng: parseFloat(f.lng),
+        lat: loc.lat,
+        lng: loc.lng,
       });
       setF({ ...empty });
+      setLoc(null);
+      setLocMsg("");
       setMsg("Événement ajouté. Jazakoumoullahou khayran !");
     } catch (e) {
       setMsg(e instanceof Error ? e.message : "Erreur lors de l'ajout");
@@ -78,12 +108,15 @@ export default function Admin() {
       </div>
 
       {user?.role === "admin" && (
-        <div className="mt-6 flex gap-2">
+        <div className="mt-6 flex flex-wrap gap-2">
           <button onClick={() => setTab("events")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "events" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
             Événements
           </button>
           <button onClick={() => setTab("users")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "users" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
             Comptes
+          </button>
+          <button onClick={() => setTab("categories")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "categories" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
+            Catégories
           </button>
         </div>
       )}
@@ -102,8 +135,8 @@ export default function Admin() {
                 onChange={(e) => setF({ ...f, category: e.target.value })}
                 className="mt-1 w-full rounded-xl border border-green-dark/15 px-3 py-2 text-sm outline-none focus:border-gold"
               >
-                {["Ziarra", "Causerie", "Récital", "Social", "Assemblée"].map((c) => (
-                  <option key={c}>{c}</option>
+                {categories.map((c) => (
+                  <option key={c.id}>{c.name}</option>
                 ))}
               </select>
             </label>
@@ -111,8 +144,26 @@ export default function Admin() {
             {field("time", "Heure", "time")}
             {field("place", "Lieu")}
             {field("city", "Quartier / Ville")}
-            {field("lat", "Latitude")}
-            {field("lng", "Longitude")}
+            <div className="sm:col-span-2 lg:col-span-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[0.65rem] font-bold uppercase tracking-widest text-ink/45">Localisation</span>
+                <button
+                  type="button"
+                  onClick={locate}
+                  disabled={locating}
+                  className="ml-auto rounded-xl bg-green-dark px-4 py-2 text-xs font-bold text-gold disabled:opacity-60"
+                >
+                  {locating ? "Recherche…" : "📍 Localiser automatiquement"}
+                </button>
+              </div>
+              <div className="mt-2 overflow-hidden rounded-xl border border-green-dark/15">
+                <LocationPicker value={loc} onPick={(lat, lng) => setLoc({ lat, lng, label: `${lat}, ${lng}` })} />
+              </div>
+              <p className="mt-2 text-[0.65rem] text-ink/45">
+                Cliquez sur la carte pour ajuster la position exacte. {loc && `Repère placé : ${loc.lat.toFixed(5)}, ${loc.lng.toFixed(5)}`}
+              </p>
+              {locMsg && <p className="mt-1 text-xs text-terracotta">{locMsg}</p>}
+            </div>
             {field("host", "Organisateur")}
             {field("phone", "Téléphone")}
             <label className="block sm:col-span-2">
@@ -143,6 +194,127 @@ export default function Admin() {
       )}
 
       {tab === "users" && <UsersPanel onLogout={logout} />}
+      {tab === "categories" && <CategoriesPanel />}
+    </div>
+  );
+}
+
+function CategoriesPanel() {
+  const { categories, add, update, remove } = useCategories();
+  const [form, setForm] = useState({ name: "", color: "#0F3D2E" });
+  const [editId, setEditId] = useState<string | null>(null);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+
+  const submit = async (ev: React.FormEvent) => {
+    ev.preventDefault();
+    setMsg(null);
+    try {
+      if (editId) {
+        await update(editId, form.name, form.color);
+        setMsg({ ok: true, text: "Catégorie modifiée." });
+      } else {
+        await add(form.name, form.color);
+        setMsg({ ok: true, text: "Catégorie ajoutée." });
+      }
+      setForm({ name: "", color: "#0F3D2E" });
+      setEditId(null);
+    } catch (e) {
+      setMsg({ ok: false, text: e instanceof Error ? e.message : "Erreur" });
+    }
+  };
+
+  const startEdit = (id: string, name: string, color: string) => {
+    setEditId(id);
+    setForm({ name, color });
+    setMsg(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const doRemove = async (id: string) => {
+    setMsg(null);
+    try {
+      await remove(id);
+      setMsg({ ok: true, text: "Catégorie supprimée." });
+    } catch (e) {
+      setMsg({ ok: false, text: e instanceof Error ? e.message : "Erreur" });
+    }
+  };
+
+  return (
+    <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_360px]">
+      <div className="rounded-3xl border border-green-dark/10 bg-white p-6 shadow-sm">
+        <h3 className="text-lg font-bold text-green-darker">
+          {editId ? "Modifier la catégorie" : "Ajouter une catégorie"}
+        </h3>
+        {msg && (
+          <p className={`mt-3 rounded-xl px-4 py-2 text-sm ${msg.ok ? "bg-gold/15 text-green-dark" : "bg-terracotta/10 text-terracotta"}`}>
+            {msg.text}
+          </p>
+        )}
+        <form onSubmit={submit} className="mt-4 flex flex-wrap items-end gap-3">
+          <label className="min-w-[180px] flex-1">
+            <span className="text-[0.65rem] font-bold uppercase tracking-widest text-ink/45">Nom</span>
+            <input
+              required
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              placeholder="Ex : Zikr"
+              className="mt-1 w-full rounded-xl border border-green-dark/15 px-3 py-2 text-sm outline-none focus:border-gold"
+            />
+          </label>
+          <label className="min-w-[120px]">
+            <span className="text-[0.65rem] font-bold uppercase tracking-widest text-ink/45">Couleur</span>
+            <div className="mt-1 flex items-center gap-2 rounded-xl border border-green-dark/15 px-2 py-1.5">
+              <input
+                type="color"
+                value={form.color}
+                onChange={(e) => setForm({ ...form, color: e.target.value })}
+                className="h-7 w-10 cursor-pointer border-0 bg-transparent p-0"
+              />
+              <span className="text-xs text-ink/60">{form.color}</span>
+            </div>
+          </label>
+          <div className="flex gap-2">
+            <button className="rounded-xl bg-terracotta px-5 py-2.5 text-sm font-bold text-white">
+              {editId ? "Enregistrer" : "Ajouter"}
+            </button>
+            {editId && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditId(null);
+                  setForm({ name: "", color: "#0F3D2E" });
+                }}
+                className="rounded-xl border border-green-dark/25 px-4 py-2.5 text-sm font-bold text-green-dark"
+              >
+                Annuler
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+
+      <div className="rounded-3xl border border-green-dark/10 bg-white p-6 shadow-sm">
+        <h3 className="text-lg font-bold text-green-darker">Catégories ({categories.length})</h3>
+        <div className="mt-4 space-y-3">
+          {categories.map((c) => (
+            <div key={c.id} className="flex items-center gap-3 rounded-2xl border border-green-dark/10 p-4">
+              <span className="h-5 w-5 shrink-0 rounded-full ring-2 ring-white" style={{ background: c.color }} />
+              <div className="min-w-0 flex-1 font-semibold text-green-dark">{c.name}</div>
+              <button onClick={() => startEdit(c.id, c.name, c.color)} className="rounded-lg border border-green-dark/25 px-3 py-1.5 text-xs font-bold text-green-dark">
+                Modifier
+              </button>
+              <button onClick={() => doRemove(c.id)} className="rounded-lg border border-terracotta/40 px-3 py-1.5 text-xs font-bold text-terracotta">
+                Supprimer
+              </button>
+            </div>
+          ))}
+          {categories.length === 0 && <p className="text-sm text-ink/50">Aucune catégorie.</p>}
+        </div>
+        <p className="mt-4 text-[0.65rem] text-ink/40">
+          Une catégorie utilisée par des événements ne peut pas être supprimée. La couleur sert aux repères de la carte et aux pastilles.
+        </p>
+      </div>
     </div>
   );
 }
