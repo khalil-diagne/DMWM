@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --color-green-dark: #0F3D2E;
+  --color-green-darker: #0A2B20;
+  --color-terracotta: #C1502E;
+  --color-gold: #D4A24C;
+  --color-slate2: #2E4053;
+  --color-cream: #F7F1E3;
+  --color-creamdark: #EDE3CC;
+  --color-ink: #1C2620;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "Aref Ruqaa", serif;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--color-cream); color: var(--color-ink); }
+
+.arabic { font-family: var(--font-arabic); direction: rtl; unicode-bidi: isolate; }
+
+.islamic-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23D4A24C' stroke-width='1' opacity='0.35'%3E%3Cpath d='M30 2 L37 15 L52 15 L41 25 L45 40 L30 31 L15 40 L19 25 L8 15 L23 15 Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 60px 60px;
+}
+
+.leaflet-container { background: #e8e3d5; z-index: 0; }
+
+@keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.floaty { animation: floaty 6s ease-in-out infinite; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+.fade-up { animation: fadeUp .6s ease both; }
