@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { getUsers, getUserByEmail, createUser } from "../../server/db";
-import { requireRole, hashPassword } from "../../server/auth";
-import { json, readBody, str } from "../../server/http";
+import { getUsers, getUserByEmail, createUser } from "../_lib/db";
+import { requireRole, hashPassword } from "../_lib/auth";
+import { json, readBody, str } from "../_lib/http";
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   const admin = await requireRole(req, res, ["admin"]);

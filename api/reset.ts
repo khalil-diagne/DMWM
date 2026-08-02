@@ -1,8 +1,8 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { deleteAllEvents, createEvent } from "../server/db";
-import { requireRole } from "../server/auth";
-import { json } from "../server/http";
-import { seedEvents } from "../server/seed";
+import { deleteAllEvents, createEvent } from "./_lib/db";
+import { requireRole } from "./_lib/auth";
+import { json } from "./_lib/http";
+import { seedEvents } from "./_lib/seed";
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   const user = await requireRole(req, res, ["admin", "secretaire"]);

@@ -10,7 +10,7 @@ import userDetail from "../api/users/[id]";
 import categoriesIndex from "../api/categories/index";
 import categoryDetail from "../api/categories/[id]";
 import reset from "../api/reset";
-import { json } from "./http";
+import { json } from "../api/_lib/http";
 
 const routes: { match: (method: string, path: string) => boolean; handler: (req: IncomingMessage, res: ServerResponse) => Promise<void> }[] = [
   { match: (m, p) => m === "POST" && p === "/api/auth/login", handler: login },

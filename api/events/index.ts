@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { getEvents, createEvent, getCategories } from "../../server/db";
-import { requireRole } from "../../server/auth";
-import { json, readBody, str } from "../../server/http";
+import { getEvents, createEvent, getCategories } from "../_lib/db";
+import { requireRole } from "../_lib/auth";
+import { json, readBody, str } from "../_lib/http";
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   if (req.method === "GET") {

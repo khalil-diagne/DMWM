@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { getUserByEmail } from "../../server/db";
-import { setAuthCookie, signToken, verifyPassword } from "../../server/auth";
-import { json, readBody, str } from "../../server/http";
+import { getUserByEmail } from "../_lib/db";
+import { setAuthCookie, signToken, verifyPassword } from "../_lib/auth";
+import { json, readBody, str } from "../_lib/http";
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   if (req.method !== "POST") return json(res, 405, { error: "Méthode non autorisée" });

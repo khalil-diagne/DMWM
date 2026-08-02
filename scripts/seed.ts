@@ -1,8 +1,8 @@
 import "dotenv/config";
 import { Pool } from "@neondatabase/serverless";
-import { getUserByEmail, getCategoryByName, getEvent, createUser, createEvent, createCategory } from "../server/db";
-import { hashPassword } from "../server/auth";
-import { seedEvents, seedCategories } from "../server/seed";
+import { getUserByEmail, getCategoryByName, getEvent, createUser, createEvent, createCategory } from "../api/_lib/db";
+import { hashPassword } from "../api/_lib/auth";
+import { seedEvents, seedCategories } from "../api/_lib/seed";
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@dahira.sn";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "dahira-admin-2026";

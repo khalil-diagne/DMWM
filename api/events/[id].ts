@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { getEvent, updateEvent, deleteEvent } from "../../server/db";
-import { requireRole } from "../../server/auth";
-import { json, readBody, str } from "../../server/http";
+import { getEvent, updateEvent, deleteEvent } from "../_lib/db";
+import { requireRole } from "../_lib/auth";
+import { json, readBody, str } from "../_lib/http";
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   const url = new URL(req.url ?? "/", "http://localhost");
