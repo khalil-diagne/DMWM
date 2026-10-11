@@ -8,6 +8,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
+import Attendance from "./pages/Attendance";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { EventsProvider } from "./store";
 import { AuthProvider } from "./auth";
@@ -33,6 +34,14 @@ export default function App() {
                   element={
                     <ProtectedRoute>
                       <Admin />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/espace-prive-d8a9x/presences"
+                  element={
+                    <ProtectedRoute>
+                      <Attendance />
                     </ProtectedRoute>
                   }
                 />
