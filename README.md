@@ -146,11 +146,15 @@ DATABASE_URL=<url-production> npm run db:seed
 
 Ou, une fois connecté dans l'espace privé, cliquez sur **« Réinitialiser les données »** dans le tableau de bord : cela supprime les événements et réinsère les 5 événements de démonstration.
 
+
+Avant d’utiliser le suivi des présences sur une base déjà déployée, relancez `npm run db:setup` avec `DATABASE_URL` pointant vers cette base. Le schéma est idempotent et cette commande ajoute la table des présences sans supprimer les événements existants.
+
 ## Utilisation
 
 - **Public** : accueil avec compte à rebours du prochain événement, liste filtrable des événements, carte interactive, pages « Le Dahira » et « Contact ».
 - **Connexion** : bouton « Se connecter » dans la barre de navigation → page de connexion (email + mot de passe).
 - **Espace privé** (`/espace-prive-d8a9x`) : tableau de bord protégé.
   - **Événements** : ajout, suppression, réinitialisation.
+  - **Présences** : pour chaque événement, ajouter, modifier, supprimer et imprimer les noms des participants ; l’accès est réservé aux secrétaires et administrateurs.
   - **Comptes** (admin uniquement) : créer des comptes secrétaires ou admins, supprimer des comptes.
 - **Carte** : chaque événement est géolocalisé ; itinéraire Google Maps et partage WhatsApp disponibles sur chaque fiche.
