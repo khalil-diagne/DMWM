@@ -11,8 +11,7 @@ type AttendanceRow = {
 };
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
-  const user = await requireRole(req, res, ["admin", "secretaire"]);
-  if (!user) return;
+  if (!(await requireRole(req, res, ["admin", "secretaire"]))) return;
 
   const url = new URL(req.url ?? "/", "http://localhost");
   const parts = url.pathname.split("/").filter(Boolean);
