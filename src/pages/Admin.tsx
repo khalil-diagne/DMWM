@@ -7,6 +7,7 @@ import EventCard from "../components/EventCard";
 import { LocationPicker } from "../components/LocationPicker";
 import { geocode, type GeoResult } from "../geocode";
 import type { EventItem } from "../data";
+import Attendance from "./Attendance";
 
 const empty = {
   title: "",
@@ -24,7 +25,7 @@ export default function Admin() {
   const { events, add, remove, reset, loading, error } = useEvents();
   const { user, logout } = useAuth();
   const { categories } = useCategories();
-  const [tab, setTab] = useState<"events" | "users" | "categories">("events");
+  const [tab, setTab] = useState<"events" | "users" | "categories" | "attendance">("events");
   const [f, setF] = useState({ ...empty });
   const [loc, setLoc] = useState<GeoResult | null>(null);
   const [locMsg, setLocMsg] = useState("");
@@ -107,19 +108,24 @@ export default function Admin() {
         </div>
       </div>
 
-      {user?.role === "admin" && (
-        <div className="mt-6 flex flex-wrap gap-2">
-          <button onClick={() => setTab("events")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "events" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
-            Événements
-          </button>
-          <button onClick={() => setTab("users")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "users" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
-            Comptes
-          </button>
-          <button onClick={() => setTab("categories")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "categories" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
-            Catégories
-          </button>
-        </div>
-      )}
+      <div className="mt-6 flex flex-wrap gap-2">
+        <button onClick={() => setTab("events")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "events" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
+          Événements
+        </button>
+        <button onClick={() => setTab("attendance")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "attendance" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
+          Présences
+        </button>
+        {user?.role === "admin" && (
+          <>
+            <button onClick={() => setTab("users")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "users" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
+              Comptes
+            </button>
+            <button onClick={() => setTab("categories")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "categories" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
+              Catégories
+            </button>
+          </>
+        )}
+      </div>
 
       {tab === "events" && (
         <>
@@ -195,6 +201,7 @@ export default function Admin() {
 
       {tab === "users" && <UsersPanel onLogout={logout} />}
       {tab === "categories" && <CategoriesPanel />}
+      {tab === "attendance" && <Attendance />}
     </div>
   );
 }
