@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { api } from "../api";
 import { fmtDate } from "../data";
 import { useEvents } from "../store";
@@ -35,6 +35,7 @@ export default function Attendance() {
       };
     }
 
+    setAttendees([]);
     setAttendeesLoading(true);
     setError("");
     api<{ attendees: AttendanceRow[] }>("/attendance?eventId=" + encodeURIComponent(eventId))
@@ -53,7 +54,7 @@ export default function Attendance() {
     };
   }, [eventId]);
 
-  const addAttendee = async (ev: React.FormEvent) => {
+  const addAttendee = async (ev: FormEvent) => {
     ev.preventDefault();
     const cleanName = name.trim();
     if (!eventId || !cleanName) return;
@@ -198,11 +199,7 @@ export default function Attendance() {
             <ol className="mt-3 list-decimal space-y-2 pl-6">
               {attendees.map((attendee) => (
                 <li key={attendee.id} className="min-h-7">
-                  {editingId === attendee.id ? (
-                    <span className="no-print text-ink/40">Modification en cours</span>
-                  ) : (
-                    attendee.name
-                  )}
+                  {attendee.name}
                   <span className="no-print ml-3 inline-flex gap-2">
                     {editingId === attendee.id ? (
                       <>
