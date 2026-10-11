@@ -181,6 +181,7 @@ export default function Attendance() {
             <p className="mr-auto text-sm text-ink/60">{attendees.length} présence{attendees.length === 1 ? "" : "s"} enregistrée{attendees.length === 1 ? "" : "s"}</p>
             <button
               type="button"
+              disabled={attendeesLoading}
               onClick={() => window.print()}
               className="rounded-xl bg-terracotta px-5 py-3 text-sm font-bold text-white disabled:opacity-50"
             >
