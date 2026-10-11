@@ -133,8 +133,10 @@ export default function Attendance() {
             onChange={(ev) => {
               setEventId(ev.target.value);
               setMessage("");
+              setEditingId(null);
+              setEditingName("");
             }}
-            disabled={eventsLoading || events.length === 0}
+            disabled={eventsLoading || events.length === 0 || busy}
             className="mt-1 w-full rounded-xl border border-green-dark/15 bg-white px-4 py-3 text-sm outline-none focus:border-gold"
           >
             <option value="">Choisir un événement…</option>
@@ -181,7 +183,7 @@ export default function Attendance() {
             <p className="mr-auto text-sm text-ink/60">{attendees.length} présence{attendees.length === 1 ? "" : "s"} enregistrée{attendees.length === 1 ? "" : "s"}</p>
             <button
               type="button"
-              disabled={attendeesLoading}
+              disabled={attendeesLoading || Boolean(error)}
               onClick={() => window.print()}
               className="rounded-xl bg-terracotta px-5 py-3 text-sm font-bold text-white disabled:opacity-50"
             >
