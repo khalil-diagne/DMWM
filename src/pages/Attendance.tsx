@@ -16,6 +16,7 @@ export default function Attendance() {
   const [attendees, setAttendees] = useState<AttendanceRow[]>([]);
   const [attendeesLoading, setAttendeesLoading] = useState(false);
   const [name, setName] = useState("");
+  const [search, setSearch] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
   const [busy, setBusy] = useState(false);
@@ -119,7 +120,7 @@ export default function Attendance() {
 
   return (
     <div className="mx-auto max-w-5xl px-5 py-12">
-      <style>{"@page { margin: 18mm; } @media print { body * { visibility: hidden !important; } #attendance-print, #attendance-print * { visibility: visible !important; } #attendance-print { position: absolute; left: 0; top: 0; width: 100%; padding: 0; border: 0; box-shadow: none; color: #111; background: #fff; } .no-print { display: none !important; } }"}</style>
+      <style>{"@page { margin: 18mm; } @media print { body * { visibility: hidden !important; } #attendance-print, #attendance-print * { visibility: visible !important; }  #attendance-print { position: absolute; left: 0; top: 0; width: 100%; padding: 0; border: 0; box-shadow: none; color: #111; background: #fff; } .attendance-filtered { display: list-item !important; } .no-print { display: none !important; } }"}</style>
 
       <div className="no-print">
         <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-terracotta">Gestion</p>
@@ -180,7 +181,7 @@ export default function Attendance() {
 
         {selectedEvent && (
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <p className="mr-auto text-sm text-ink/60">{attendees.length} présence{attendees.length === 1 ? "" : "s"} enregistrée{attendees.length === 1 ? "" : "s"}</p>
+            <div className="mr-auto flex flex-wrap items-center gap-3"><p className="text-sm text-ink/60">{attendees.filter((a) => a.name.toLocaleLowerCase("fr").includes(search.trim().toLocaleLowerCase("fr"))).length} résultat(s) sur {attendees.length} présence(s)</p><input aria-label="Rechercher un nom" value={search} onChange={(ev) => setSearch(ev.target.value)} placeholder="Rechercher un nom…" className="rounded-xl border border-green-dark/15 px-3 py-2 text-sm" /></div>
             <button
               type="button"
               disabled={attendeesLoading || Boolean(error)}
@@ -201,7 +202,7 @@ export default function Attendance() {
             <h2 className="text-lg font-semibold">Liste des personnes présentes</h2>
             <ol className="mt-3 list-decimal space-y-2 pl-6">
               {attendees.map((attendee) => (
-                <li key={attendee.id} className="min-h-7">
+                <li key={attendee.id} className={"min-h-7 " + (search.trim() && !attendee.name.toLocaleLowerCase("fr").includes(search.trim().toLocaleLowerCase("fr")) ? "attendance-filtered hidden" : "")}>
                   {attendee.name}
                   <span className="no-print ml-3 inline-flex gap-2">
                     {editingId === attendee.id ? (
