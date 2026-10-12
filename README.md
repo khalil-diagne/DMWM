@@ -155,6 +155,8 @@ Avant d’utiliser le suivi des présences, l’historique, les messages de cont
 - **Connexion** : bouton « Se connecter » dans la barre de navigation → page de connexion (email + mot de passe).
 - **Espace privé** (`/espace-prive-d8a9x`) : tableau de bord protégé.
   - **Événements** : ajout, suppression, réinitialisation.
-  - **Présences** : pour chaque événement, ajouter, rechercher, modifier, supprimer et imprimer les noms des participants ; l’accès est réservé aux secrétaires et administrateurs.\n  - **Suivi** : statistiques de participation, historique des changements, comptes rendus par événement et, pour les administrateurs, messages reçus via le formulaire de contact.\n- **Rappels** : chaque fiche événement propose un message WhatsApp prérempli à envoyer manuellement.
+  - **Présences** : pour chaque événement, ajouter, rechercher, modifier, supprimer et imprimer les noms des participants ; l’accès est réservé aux secrétaires et administrateurs.
+  - **Suivi** : statistiques de participation, historique des changements, comptes rendus par événement et, pour les administrateurs, messages reçus via le formulaire de contact.
+- **Rappels** : chaque fiche événement propose un message WhatsApp prérempli à envoyer manuellement.
   - **Comptes** (admin uniquement) : créer des comptes secrétaires ou admins, supprimer des comptes.
 - **Carte** : chaque événement est géolocalisé ; itinéraire Google Maps et partage WhatsApp disponibles sur chaque fiche.
