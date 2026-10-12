@@ -77,6 +77,28 @@ export default function Layout() {
                 Admin
               </NavLink>
             )}
+            {user && (
+              <NavLink
+                to="/espace-prive-d8a9x/presences"
+                className={({ isActive }) =>
+                  `block rounded-xl px-4 py-3 text-sm ${isActive ? "bg-gold/20 text-gold font-semibold" : "text-cream/85"}`
+                }
+              >
+                Présences
+              </NavLink>
+            )}
+            {user && (
+              <NavLink
+                to="/espace-prive-d8a9x/presences"
+                className={({ isActive }) =>
+                  `rounded-full px-4 py-3 text-sm transition ${
+                    isActive ? "bg-gold text-green-darker font-semibold" : "text-cream/85 hover:bg-white/10"
+                  }`
+                }
+              >
+                Présences
+              </NavLink>
+            )}
           </nav>
           <div className="ml-auto flex items-center gap-3">
             {!user && (

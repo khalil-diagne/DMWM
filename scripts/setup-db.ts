@@ -14,7 +14,7 @@ async function main() {
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
   const schema = readFileSync(join(__dirname, "..", "api", "_lib", "schema.sql"), "utf8");
   await pool.query(schema);
-  console.log("Schéma appliqué : tables users et events prêtes.");
+  console.log("Schéma appliqué : tables users, categories, events et event_attendance prêtes.");
   await pool.end();
 }
 
