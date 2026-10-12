@@ -42,7 +42,8 @@ export default function EventDetail() {
 
         <div className="mt-6 flex flex-wrap gap-3">
           <a href={mapsUrl(e)} target="_blank" className="rounded-xl bg-slate2 px-5 py-3 text-sm font-bold text-white">Itinéraire</a>
-          <a href={waUrl(e)} target="_blank" rel="noreferrer" className="rounded-xl bg-[#128C4A] px-5 py-3 text-sm font-bold text-white">Partager WhatsApp</a>\n          <a href={reminderWaUrl(e)} target="_blank" rel="noreferrer" className="rounded-xl border border-[#128C4A] px-5 py-3 text-sm font-bold text-[#128C4A]">Préparer un rappel WhatsApp</a>
+          <a href={waUrl(e)} target="_blank" rel="noreferrer" className="rounded-xl bg-[#128C4A] px-5 py-3 text-sm font-bold text-white">Partager WhatsApp</a>
+          <a href={reminderWaUrl(e)} target="_blank" rel="noreferrer" className="rounded-xl border border-[#128C4A] px-5 py-3 text-sm font-bold text-[#128C4A]">Préparer un rappel WhatsApp</a>
           <a href={`tel:${e.phone}`} className="rounded-xl bg-terracotta px-5 py-3 text-sm font-bold text-white">Appeler l'organisateur</a>
         </div>
 
