@@ -157,6 +157,6 @@ Avant d’utiliser le suivi des présences, l’historique, les messages de cont
   - **Événements** : ajout, suppression, réinitialisation.
   - **Présences** : pour chaque événement, ajouter, rechercher, modifier, supprimer et imprimer les noms des participants ; l’accès est réservé aux secrétaires et administrateurs.
   - **Suivi** : statistiques de participation, historique des changements, comptes rendus par événement et, pour les administrateurs, messages reçus via le formulaire de contact.
-- **Rappels** : chaque fiche événement propose un message WhatsApp prérempli à envoyer manuellement.
   - **Comptes** (admin uniquement) : créer des comptes secrétaires ou admins, supprimer des comptes.
+- **Rappels** : chaque fiche événement propose un message WhatsApp prérempli à envoyer manuellement.
 - **Carte** : chaque événement est géolocalisé ; itinéraire Google Maps et partage WhatsApp disponibles sur chaque fiche.
