@@ -3,7 +3,7 @@ import { api } from "../api";
 export default function Contact() {
  const [sent,setSent]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState("");
  const [form,setForm]=useState({name:"",phone:"",neighborhood:"",message:"",website:""});
- const submit=async(e:FormEvent)=>{e.preventDefault();setBusy(true);setError("");try{await api("/contact",{method:"POST",body:JSON.stringify(form)});setSent(true)}catch(err){setError(err instanceof Error?err.message:"Envoi impossible. Réessayez.");}finally{setBusy(false)}};
+ const submit=async(e:FormEvent)=>{e.preventDefault();setBusy(true);setError("");try{await api("/events?resource=contact",{method:"POST",body:JSON.stringify(form)});setSent(true)}catch(err){setError(err instanceof Error?err.message:"Envoi impossible. Réessayez.");}finally{setBusy(false)}};
  return <div className="mx-auto max-w-5xl px-5 py-12">
   <p className="text-[0.7rem] font-bold uppercase tracking-[0.2em] text-terracotta">Restons en contact</p><h2 className="text-3xl font-extrabold text-green-darker">Contact & inscription</h2>
   <div className="mt-8 grid gap-6 md:grid-cols-2">
