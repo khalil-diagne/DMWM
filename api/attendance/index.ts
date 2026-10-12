@@ -10,6 +10,21 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   if (!user) return;
   if (req.method === "GET") {
     const url = new URL(req.url ?? "/", "http://localhost");
+    const view = url.searchParams.get("view");
+    if (view === "stats") {
+      const stats = await query<{event_id:string;title:string;date:string;attendance_count:number}>(
+        "SELECT e.id AS event_id, e.title, e.date, COUNT(a.id)::int AS attendance_count FROM events e LEFT JOIN event_attendance a ON a.event_id=e.id GROUP BY e.id ORDER BY e.date DESC"
+      );
+      return json(res, 200, { stats, total: stats.reduce((n, row) => n + row.attendance_count, 0) });
+    }
+    if (view === "history") {
+      const eventId = url.searchParams.get("eventId");
+      const history = await query(
+        "SELECT h.id,h.action,h.name,h.previous_name,h.changed_at,u.name AS changed_by,e.title AS event_title FROM event_attendance_history h JOIN events e ON e.id=h.event_id LEFT JOIN users u ON u.id=h.changed_by WHERE ($1::text IS NULL OR h.event_id=$1) ORDER BY h.changed_at DESC LIMIT 300",
+        [eventId]
+      );
+      return json(res, 200, { history });
+    }
     const eventId = str(url.searchParams.get("eventId"));
     if (!eventId) return json(res, 400, { error: "Événement requis" });
     const event = await queryOne<{ id: string }>("SELECT id FROM events WHERE id = $1", [eventId]);
