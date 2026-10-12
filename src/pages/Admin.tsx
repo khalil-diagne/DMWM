@@ -8,6 +8,7 @@ import { LocationPicker } from "../components/LocationPicker";
 import { geocode, type GeoResult } from "../geocode";
 import type { EventItem } from "../data";
 import Attendance from "./Attendance";
+import CommunityTools from "./CommunityTools";
 
 const empty = {
   title: "",
@@ -25,7 +26,7 @@ export default function Admin() {
   const { events, add, remove, reset, loading, error } = useEvents();
   const { user, logout } = useAuth();
   const { categories } = useCategories();
-  const [tab, setTab] = useState<"events" | "users" | "categories" | "attendance">("events");
+  const [tab, setTab] = useState<"events" | "users" | "categories" | "attendance" | "community">("events");
   const [f, setF] = useState({ ...empty });
   const [loc, setLoc] = useState<GeoResult | null>(null);
   const [locMsg, setLocMsg] = useState("");
@@ -115,6 +116,9 @@ export default function Admin() {
         <button onClick={() => setTab("attendance")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "attendance" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
           Présences
         </button>
+        <button onClick={() => setTab("community")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "community" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
+          Suivi
+        </button>
         {user?.role === "admin" && (
           <>
             <button onClick={() => setTab("users")} className={`rounded-full px-5 py-2.5 text-sm font-bold transition ${tab === "users" ? "bg-green-dark text-gold" : "border border-green-dark/20 bg-white text-green-dark"}`}>
@@ -202,6 +206,7 @@ export default function Admin() {
       {tab === "users" && <UsersPanel onLogout={logout} />}
       {tab === "categories" && <CategoriesPanel />}
       {tab === "attendance" && <Attendance />}
+      {tab === "community" && <CommunityTools events={events} role={user?.role === "admin" ? "admin" : "secretaire"} />}
     </div>
   );
 }

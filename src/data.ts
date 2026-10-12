@@ -109,3 +109,8 @@ export const waUrl = (e: EventItem) =>
   `https://wa.me/?text=${encodeURIComponent(
     `${e.title} — ${fmtDate(e.date)} à ${e.time}\n📍 ${e.place}, ${e.city}\n${mapsUrl(e)}`
   )}`;
+
+export const reminderWaUrl = (e: EventItem) =>
+  `https://wa.me/?text=${encodeURIComponent(
+    `Rappel : ${e.title} aura lieu le ${fmtDate(e.date)} à ${e.time} (GMT).\n📍 ${e.place}, ${e.city}\nNous serons heureux de vous y retrouver !\n${mapsUrl(e)}`
+  )}`;

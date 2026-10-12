@@ -42,3 +42,43 @@ CREATE TABLE IF NOT EXISTS event_attendance (
 
 CREATE INDEX IF NOT EXISTS idx_event_attendance_event
   ON event_attendance(event_id, created_at, id);
+
+
+ALTER TABLE event_attendance
+  ADD COLUMN IF NOT EXISTS created_by TEXT REFERENCES users(id) ON DELETE SET NULL;
+ALTER TABLE event_attendance
+  ADD COLUMN IF NOT EXISTS updated_by TEXT REFERENCES users(id) ON DELETE SET NULL;
+ALTER TABLE event_attendance
+  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT now();
+
+CREATE TABLE IF NOT EXISTS event_attendance_history (
+  id TEXT PRIMARY KEY,
+  event_id TEXT NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+  attendee_id TEXT,
+  action TEXT NOT NULL CHECK (action IN ('added', 'renamed', 'removed')),
+  name TEXT NOT NULL,
+  previous_name TEXT,
+  changed_by TEXT REFERENCES users(id) ON DELETE SET NULL,
+  changed_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_attendance_history_event
+  ON event_attendance_history(event_id, changed_at DESC);
+
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  neighborhood TEXT NOT NULL,
+  message TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'read')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_contact_messages_status_created
+  ON contact_messages(status, created_at DESC);
+
+CREATE TABLE IF NOT EXISTS event_reports (
+  event_id TEXT PRIMARY KEY REFERENCES events(id) ON DELETE CASCADE,
+  summary TEXT NOT NULL DEFAULT '',
+  updated_by TEXT REFERENCES users(id) ON DELETE SET NULL,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
